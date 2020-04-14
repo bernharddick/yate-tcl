@@ -834,6 +834,13 @@ proc ::ygi::_en_numberfiles {number {language "en"}} {
 			return [list {*}[_en_numberfiles [expr {$number / 1000}]] thousand]
 		}
 	}
+	if {$number < 1000000000} {
+		if {$number % 1000000} {
+			return [list {*}[_en_numberfiles [expr {$number / 1000000}]] million {*}[_en_numberfiles [expr {$number % 1000000}]]]
+		} else {
+			return [list {*}[_en_numberfiles [expr {$number / 1000000}]] million]
+		}
+	}
 	return [split $number ""]
 }
 
@@ -873,6 +880,20 @@ proc ::ygi::_de_numberfiles {number {language "de"}} {
 			return [list {*}[_de_numberfiles [expr {$number / 1000}]] tausend {*}[_de_numberfiles [expr {$number % 1000}]]]
 		} else {
 			return [list {*}[_de_numberfiles [expr {$number / 1000}]] tausend]
+		}
+	}
+	if {$number < 2000000} {
+		if {$number % 1000000} {
+			return [list 1000000 {*}[_de_numberfiles [expr {$number % 1000000}]]]
+		} else {
+			return [list 1000000]
+		}
+	}	
+	if {$number < 1000000000} {
+		if {$number % 1000000} {
+			return [list {*}[_de_numberfiles [expr {$number / 1000000}]] millionen {*}[_de_numberfiles [expr {$number % 1000000}]]]
+		} else {
+			return [list {*}[_de_numberfiles [expr {$number / 1000000}]] millionen]
 		}
 	}
 	return [split $number ""]
