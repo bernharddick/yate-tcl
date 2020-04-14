@@ -821,10 +821,18 @@ proc ::ygi::_en_numberfiles {number {language "en"}} {
 		return $files
 	}
 	if {$number < 1000} {
-		return [list [expr {$number / 100}] hundred and {*}[_en_numberfiles [expr {$number % 100}]]]
+		if {$number % 100} {
+			return [list [expr {$number / 100}] hundred and {*}[_en_numberfiles [expr {$number % 100}]]]
+		} else {
+			return [list [expr {$number / 100}] hundred]
+		}
 	}
 	if {$number < 1000000} {
-		return [list {*}[_en_numberfiles [expr {$number / 1000}]] thousand {*}[_en_numberfiles [expr {$number % 1000}]]]
+		if {$number % 1000} {
+			return [list {*}[_en_numberfiles [expr {$number / 1000}]] thousand {*}[_en_numberfiles [expr {$number % 1000}]]]
+		} else {
+			return [list {*}[_en_numberfiles [expr {$number / 1000}]] thousand]
+		}
 	}
 	return [split $number ""]
 }
@@ -839,11 +847,33 @@ proc ::ygi::_de_numberfiles {number {language "de"}} {
 		if {$rem} {return [list $rem und $tens]}
 		return [list $tens]
 	}
+	if {$number < 200 } {
+		if {$number % 100} {
+			return [list 100 {*}[_de_numberfiles [expr {$number % 100}]]]
+		} else {
+			return [list $number]
+		}
+	}
 	if {$number < 1000} {
-		return [list [expr {$number / 100}] hundert {*}[_de_numberfiles [expr {$number % 100}]]]
+		if {$number % 100} {
+			return [list [expr {$number / 100}] hundert {*}[_de_numberfiles [expr {$number % 100}]]]
+		} else {
+			return [list [expr {$number / 100}] hundert]
+		}
+	}
+	if {$number < 2000} {
+		if {$number % 1000} {
+			return [list 1000 {*}[_de_numberfiles [expr {$number % 1000}]]]
+		} else {
+			return [list 1000]
+		}
 	}
 	if {$number < 1000000} {
-		return [list {*}[_de_numberfiles [expr {$number / 1000}]] tausend {*}[_de_numberfiles [expr {$number % 1000}]]]
+		if {$number % 1000} {
+			return [list {*}[_de_numberfiles [expr {$number / 1000}]] tausend {*}[_de_numberfiles [expr {$number % 1000}]]]
+		} else {
+			return [list {*}[_de_numberfiles [expr {$number / 1000}]] tausend]
+		}
 	}
 	return [split $number ""]
 }
